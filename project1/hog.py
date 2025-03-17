@@ -22,6 +22,19 @@ def roll_dice(num_rolls, dice=six_sided):
     assert num_rolls > 0, 'Must roll at least once.'
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
+    n = 0
+    mark = 0
+    while num_rolls > 0:
+        num_rolls = num_rolls - 1
+        roll = dice()
+        print("debug:result is", roll)
+        n = n + roll
+        if roll == 1:
+            mark = 1
+    if mark == 1:
+        return 1
+    else:
+        return n
     # END PROBLEM 1
 
 
@@ -34,6 +47,12 @@ def boar_brawl(player_score, opponent_score):
     """
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    p = player_score % 10
+    o = opponent_score // 10 % 10
+    if abs(p-o) == 0:
+        return 1
+    else:
+        return 3 * abs(p-o)
     # END PROBLEM 2
 
 
@@ -52,7 +71,13 @@ def take_turn(num_rolls, player_score, opponent_score, dice=six_sided):
     assert num_rolls <= 10, 'Cannot roll more than 10 dice.'
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    if num_rolls == 0:
+        return boar_brawl(player_score, opponent_score)
+    roll_dice_result = roll_dice(num_rolls, dice)
+    return roll_dice_result
+    
     # END PROBLEM 3
+
 
 
 def simple_update(num_rolls, player_score, opponent_score, dice=six_sided):
@@ -76,13 +101,26 @@ def is_prime(n):
 def num_factors(n):
     """Return the number of factors of N, including 1 and N itself."""
     # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
+    k = 1
+    count = 0
+    while k<=n:
+        if n % k ==0:
+            count += 1
+        k += 1
+    return count
+
     # END PROBLEM 4
 
 def sus_points(score):
     """Return the new score of a player taking into account the Sus Fuss rule."""
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    if num_factors(score) == 4 or num_factors(score) == 3:
+        while not is_prime(score):
+            score += 1
+        return score
+    else:
+        return score
     # END PROBLEM 4
 
 def sus_update(num_rolls, player_score, opponent_score, dice=six_sided):
@@ -91,6 +129,8 @@ def sus_update(num_rolls, player_score, opponent_score, dice=six_sided):
     """
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    player_score = player_score + take_turn(num_rolls, player_score, opponent_score, dice)
+    return sus_points(player_score)
     # END PROBLEM 4
 
 
